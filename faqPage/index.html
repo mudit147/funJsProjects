@@ -1,0 +1,123 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>faq Page</title>
+    <style>
+      .qaListContainer {
+        display: flex;
+        flex-direction: column;
+        list-style-type: none;
+      }
+
+      .qaItemContainer {
+        border: solid 1px;
+        padding: 0.5em;
+        margin: 1px;
+      }
+
+      .accText {
+        margin-right: 12px;
+        padding: 1px;
+      }
+      .questionContainer {
+        padding: 1px;
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+      }
+
+      .answerText {
+        display: none;
+        margin-left: 12px;
+      }
+
+      .arrow-down {
+        transform: rotate(0deg);
+        transition: transform 0.3s ease;
+      }
+
+      .arrow-up {
+        transform: rotate(180deg);
+        transition: transform 0.3s ease;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>FAQs</h1>
+
+    <ul class="qaListContainer"></ul>
+  </body>
+  <script>
+    var qas = [
+      {
+        question: 'How many bones does a cat have?',
+        answer: 'A cat has 230 bones - 6 more than a human',
+      },
+      {
+        question: 'How much do cats sleep?',
+        answer: 'The average cat sleeps 12-16 hours per day',
+      },
+      {
+        question: 'How long do cats live',
+        answer:
+          'Outdoor cats live 5 years on average. Indoor\ncats live 15 years on average.',
+      },
+    ];
+
+    const listContainer = document.querySelector('.qaListContainer');
+
+    for (const item of qas) {
+      const listItem = document.createElement('li');
+      listItem.classList.add('qaItemContainer');
+
+      //question container
+      var questionContainer = document.createElement('div');
+      questionContainer.classList.add('questionContainer');
+
+      //accrdian span
+      var accordionSign = document.createElement('span');
+      accordionSign.classList.add('accText');
+      accordionSign.textContent = '>';
+
+      //question text
+      var questionText = document.createElement('p');
+      questionText.classList.add('questionText');
+      questionText.textContent = item.question;
+
+      questionContainer.appendChild(accordionSign);
+      questionContainer.appendChild(questionText);
+      questionContainer.addEventListener('click', () =>
+        onClickQuestion(event)
+      );
+
+      //answer text
+      var answerText = document.createElement('p');
+      answerText.classList.add('answerText');
+      answerText.textContent = item.answer;
+
+      listItem.appendChild(questionContainer);
+      listItem.appendChild(answerText);
+
+      listContainer.appendChild(listItem);
+    }
+
+    function onClickQuestion(event) {
+      const element = event.currentTarget;
+      const answer = element.nextElementSibling;
+      const computedStyle = window.getComputedStyle(answer);
+      const accordionSignText = element.querySelector('.accText');
+      if (computedStyle.display === 'none') {
+        answer.style.display = 'block';
+        accordionSignText.textContent = 'v';
+      } else {
+        answer.style.display = 'none';
+        accordionSignText.textContent = '>';
+      }
+    }
+  </script>
+</html>
