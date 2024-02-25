@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mortgage Calculator</title>
+    <style>
+      .principalContainer {
+        height: 25px;
+        /* align-items: center; */
+      }
+      .interestRateContainer {
+        display: flex;
+        height: 25px;
+        align-items: center;
+      }
+      .loanLengthContainer {
+        display: flex;
+        height: 25px;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Mortgage Calculator</h1>
+    <form>
+      <label for="principal">Principal Loan Amount</label><br />
+      <div class="principalContainer">
+        <input type="number" name="principal" id="principal" min="0" required />
+      </div>
+      <br />
+      <label for="interestRate">Interest Rate</label><br />
+      <div class="interestRateContainer">
+        <input
+          type="number"
+          name="interestRate"
+          id="interestRate"
+          min="0"
+          required
+        />
+        <p>%</p>
+      </div>
+      <br />
+      <label for="loanLength">Length of Loan</label><br />
+      <div class="loanLengthContainer">
+        <input
+          type="number"
+          name="loanLength"
+          id="loanLength"
+          min="0"
+          required
+        />
+        <p>years</p>
+      </div>
+      <br />
+      <button type="submit" onClick="onSubmitCalculatePayment(event)">
+        Calculate
+      </button>
+    </form>
+
+    <p class="calculated-payment-text"></p>
+  </body>
+
+  <script>
+    function onSubmitCalculatePayment(event) {
+      event.preventDefault();
+      const principalAmt = parseInt(document.getElementById('principal').value);
+      const interestRate =
+        parseInt(document.getElementById('interestRate').value) / 1200;
+      const loanLength =
+        parseInt(document.getElementById('loanLength').value) * 12;
+
+      console.log(principalAmt);
+      console.log(interestRate);
+      console.log(loanLength);
+
+      const onePlusRPowN = Math.pow(1 + interestRate, loanLength);
+      const dividerCalc = (interestRate * onePlusRPowN) / (onePlusRPowN - 1);
+      const mortPayment = principalAmt * dividerCalc;
+
+      const paymentResultText = document.querySelector(
+        '.calculated-payment-text'
+      );
+      paymentResultText.textContent = `Your monthly mortgage payment will be $${Math.round(
+        mortPayment
+      )}`;
+    }
+  </script>
+</html>
