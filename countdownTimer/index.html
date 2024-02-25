@@ -1,0 +1,159 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>faq Page</title>
+    <style>
+      .start-button {
+        display: block;
+      }
+      .pause-reset-container {
+        display: none;
+      }
+      span.timer-container {
+        border: solid 5px;
+      }
+      .timer-display-container {
+        display: flex;
+      }
+      .timer-form {
+        display: flex;
+        align-items: center;
+      }
+      .timer-form input {
+        width: 40px;
+        height: 30px;
+      }
+      .timer-display-container {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="title">Countdown Timer</h1>
+    <div class="countdown-main">
+      <div class="timer-form">
+        <input
+          id="hour-input"
+          placeholder="hh"
+          type="number"
+          name="hour"
+          min="0"
+        />
+        <p>:</p>
+        <input
+          id="minute-input"
+          placeholder="mm"
+          type="number"
+          name="minute"
+          min="0"
+          max="60"
+        />
+        <p>:</p>
+        <input
+          id="second-input"
+          placeholder="ss"
+          type="number"
+          name="second"
+          min="0"
+          max="60"
+        />
+      </div>
+      <button class="start-button" onClick="onClickStart(event)">Start</button>
+      <div class="timer-display-container">
+        <p class="timer-display">00:00:00</p>
+      </div>
+
+      <div class="pause-reset-container">
+        <button class="pause-button" onclick="onClickPause(event)">
+          Pause
+        </button>
+        <button class="reset-button" onClick="onClickReset(event)">
+          Reset
+        </button>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    let intervalId;
+    function onClickStart() {
+      const hrInput =
+        parseInt(document.getElementById('hour-input').value) || 0;
+      const minInput =
+        parseInt(document.getElementById('minute-input').value) || 0;
+      const secInput =
+        parseInt(document.getElementById('second-input').value) || 0;
+
+      let timeinSeconds = hrInput * 3600 + minInput * 60 + secInput;
+
+      if (timeinSeconds <= 0 || isNaN(timeinSeconds)) {
+        alert('please enter a valid time');
+        return;
+      }
+
+      document.getElementById('hour-input').value = '';
+      document.getElementById('minute-input').value = '';
+      document.getElementById('second-input').value = '';
+
+      hideButtons('start');
+
+      displayTimer(timeinSeconds);
+
+      intervalId = setInterval(() => {
+        if (timeinSeconds > 0) {
+          timeinSeconds--;
+          displayTimer(timeinSeconds);
+        } else {
+          clearInterval(intervalId);
+          hideButtons('reset');
+          alert('times up!');
+          return;
+        }
+      }, 1000);
+    }
+
+    function displayTimer(timeinSeconds) {
+      const hour = Math.floor(timeinSeconds / 3600);
+      const minute = Math.floor((timeinSeconds % 3600) / 60);
+      const second = timeinSeconds % 60;
+
+      const formattedTime = `${padZero(hour)}:${padZero(minute)}:${padZero(
+        second
+      )}`;
+      document.querySelector('.timer-display').textContent = formattedTime;
+    }
+
+    function padZero(num) {
+      return num < 10 ? `0${num}` : num;
+    }
+
+    function onClickReset(event) {
+      clearInterval(intervalId);
+      document.getElementById('timer-display').textContent = '00:00:00';
+      hideButtons('reset');
+    }
+
+    function onClickPause(event) {
+      clearInterval(intervalId);
+    }
+
+    function hideButtons(button) {
+      const startButton = document.querySelector('.start-button');
+      const pauseResetContainer = document.querySelector(
+        '.pause-reset-container'
+      );
+      const timerForm = document.querySelector('.timer-form');
+      const timerDisplayContainer = document.querySelector(
+        '.timer-display-container'
+      );
+
+      startButton.style.display = button === 'start' ? 'none' : 'block';
+      pauseResetContainer.style.display = button === 'start' ? 'block' : 'none';
+
+      timerForm.style.display = button === 'start' ? 'none' : 'block flex';
+      timerDisplayContainer.style.display =
+        button === 'start' ? 'block flex' : 'none';
+    }
+  </script>
+</html>
