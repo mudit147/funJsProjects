@@ -1,0 +1,131 @@
+<!-- 
+    Shopping list:
+        1) search items
+            1.1) as the user types, hit the endpoint, show partial matches
+        2) add items
+            2.1) click on any partial match to add an item
+        
+        3) check/uncheck/delete items
+            3.1) check/uncheck them off 
+            3.2) delete them
+        
+ -->
+
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modal overlay</title>
+    <style>
+      .remove-item-button {
+        margin-left: 10px;
+      }
+      .shopping-list-item-container label.checked {
+        text-decoration: line-through;
+        color: #999;
+      }
+      .remove-item-button.checked {
+        background-color: #f2f2f2;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>My Shopping list</h1>
+    <input placeholder="search items" type="text" id="searchItem" />
+    <ul class="search-list"></ul>
+
+    <div class="shopping-list-container">
+      <h2>Shopping list</h2>
+      <ul class="shopping-list"></ul>
+    </div>
+  </body>
+
+  <script>
+    const searchItem = document.getElementById('searchItem');
+    const searchList = document.querySelector('.search-list');
+    searchItem.addEventListener('input', fetchData);
+
+    async function fetchData() {
+      try {
+        const searchTerm = searchItem.value.trim();
+        searchList.innerHTML = '';
+        if (searchTerm === '') return;
+
+        const response = await fetch(
+          `https://api.frontendeval.com/fake/food/${searchTerm}`
+        );
+
+        if (!response.ok) {
+          throw new Error('Could not fetch items');
+        }
+
+        const data = await response.json();
+        // fetchedItems = [...data];
+        // console.log(fetchedItems);
+
+        data.forEach((item) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = item;
+          listItem.addEventListener('click', () => addToShoppingCart(item));
+          searchList.appendChild(listItem);
+        });
+
+        // console.log()
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    function addToShoppingCart(item) {
+      const shoppingCartList = document.querySelector('.shopping-list');
+
+      const shoppingListItemDiv = document.createElement('div');
+      shoppingListItemDiv.classList.add('shopping-list-item-container');
+
+      const id = item;
+
+      const shoppingListItemLabel = document.createElement('label');
+      shoppingListItemLabel.setAttribute('for', id);
+
+      const shoppingListItemCheckbox = document.createElement('input');
+      shoppingListItemCheckbox.type = 'checkbox';
+      shoppingListItemCheckbox.name = item;
+      shoppingListItemCheckbox.value = item;
+      shoppingListItemCheckbox.id = id;
+
+      shoppingListItemLabel.appendChild(shoppingListItemCheckbox);
+      shoppingListItemLabel.appendChild(document.createTextNode(id));
+
+      shoppingListItemDiv.appendChild(shoppingListItemLabel);
+
+      const deleteItemButton = document.createElement('button');
+      deleteItemButton.classList.add('remove-item-button');
+      deleteItemButton.textContent = 'Remove Item';
+
+      const shoppingListItem = document.createElement('li');
+
+      deleteItemButton.addEventListener('click', () => {
+        shoppingListItem.remove();
+      });
+
+      shoppingListItemDiv.appendChild(deleteItemButton);
+
+      shoppingCartList.classList.add('shopping-list-item');
+
+      shoppingListItem.appendChild(shoppingListItemDiv);
+
+      shoppingCartList.appendChild(shoppingListItem);
+
+      shoppingListItemCheckbox.addEventListener('change', () => {
+        if (shoppingListItemCheckbox.checked) {
+          shoppingListItemLabel.classList.add('checked');
+          deleteItemButton.classList.add('checked');
+        } else {
+          shoppingListItemLabel.classList.remove('checked');
+          deleteItemButton.classList.remove('checked');
+        }
+      });
+    }
+  </script>
+</html>

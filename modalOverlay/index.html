@@ -1,0 +1,109 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modal overlay</title>
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100vh;
+      }
+      .offerAccepted {
+        display: none;
+      }
+      .showOffer {
+        cursor: pointer;
+      }
+      .modal-container {
+        display: none;
+        position: absolute;
+        /* z-index: 1; */
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, 50%);
+        border: 2px black solid;
+        padding: 30px;
+        /* text-align: center; */
+        background-color: white;
+        flex-flow: column wrap;
+      }
+
+      .modal-container.show {
+        display: flex;
+      }
+      .modal-content {
+        text-align: center;
+      }
+
+      .close-button {
+        align-self: flex-start;
+        margin-right: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="showOffer">Show Offer</button>
+    <p class="offerAccepted">Offer Accepted</p>
+
+    <!-- modal -->
+    <div class="modal-container">
+      <button class="close-button">x</button>
+      <div class="modal-content">
+        <p class="modal-text">
+          Click the button below to accept our amazing offer!
+        </p>
+        <button class="accept-offer-button">Accept Offer</button>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    const showOfferButton = document.querySelector('.showOffer');
+    const modal = document.querySelector('.modal-container');
+
+    const closeBtn = document.querySelector('.close-button');
+    const acceptOfferBtn = document.querySelector('.accept-offer-button');
+    const offerAcceptedText = document.querySelector('.offerAccepted');
+    const body = document.getElementsByTagName('body')[0];
+
+    showOfferButton.addEventListener('click', (event) => {
+      showOfferButton.style.display = 'none';
+      modal.classList.toggle('show');
+      body.style.backgroundColor = 'lightgrey';
+    });
+
+    closeBtn.addEventListener('click', (e) => {
+      modal.classList.remove('show');
+      showOfferButton.style.display = 'block';
+      body.style.backgroundColor = 'white';
+    });
+
+    acceptOfferBtn.addEventListener('click', (e) => {
+      modal.classList.remove('show');
+      showOfferButton.style.display = 'none';
+      offerAcceptedText.style.display = 'block';
+      body.style.backgroundColor = 'white';
+    });
+  </script>
+</html>
+
+<!-- 
+    1) button: show offer
+    2) Modal: 
+        2.1: cross button:
+                if clicked: 
+                    modal dismissed
+                    show "show offer" button
+        2.2: accepted offer button
+                if clicked:
+                    dismissed
+                    show "offer Accepted"
+        2.3: style:
+                should be vertically and horizontally centered
+                be in the same pos regardless of scrollng
+        
+        
+ -->
