@@ -44,7 +44,14 @@
   <script>
     const searchItem = document.getElementById('searchItem');
     const searchList = document.querySelector('.search-list');
-    searchItem.addEventListener('input', fetchData);
+    // searchItem.addEventListener('input', fetchData);
+
+    let debounceTimeout;
+
+    searchItem.addEventListener('input', () => {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(fetchData, 500);
+    });
 
     async function fetchData() {
       try {
