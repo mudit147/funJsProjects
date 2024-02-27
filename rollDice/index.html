@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dice Roll</title>
+    <style>
+      .dice-roll-container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .dice-container {
+        flex-basis: 30%;
+        flex-shrink: 1;
+        padding: 15px;
+      }
+      .dice-face-container {
+        border: 2px solid black;
+        height: 100px;
+        width: 100px;
+        background-color: rgb(226, 81, 81);
+      }
+      .dot {
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: black;
+      }
+      .one {
+      }
+    </style>
+  </head>
+  <body>
+    <section class="form-section">
+      <label for="roll-number">Number of dice</label>
+      <input type="number" id="roll-number" name="roll-number" min="0" />
+      <button id="roll-dice-button">Roll</button>
+    </section>
+
+    <section class="dice-rolling-section">
+      <div class="dice-roll-container"></div>
+    </section>
+    <div class="dice-face-container">
+      <div class="dot"></div>
+    </div>
+  </body>
+  <script>
+    const rollDiceButton = document.getElementById('roll-dice-button');
+    rollDiceButton.addEventListener('click', rollDice);
+
+    function rollDice() {
+      let diceFaces = [1, 2, 3, 4, 5, 6];
+      const rollDiceContainer = document.querySelector('.dice-roll-container');
+      const numDice = document.getElementById('roll-number').value;
+
+      rollDiceContainer.innerHTML = '';
+      console.log(numDice);
+      for (let i = 0; i < numDice; i++) {
+        const diceFace =
+          diceFaces[Math.floor(Math.random() * diceFaces.length)];
+        const diceContainer = document.createElement('div');
+        diceContainer.classList.add('dice-container');
+        diceContainer.textContent = diceFace;
+        rollDiceContainer.appendChild(diceContainer);
+      }
+    }
+  </script>
+</html>
