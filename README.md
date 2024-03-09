@@ -1,1 +1,2 @@
 # funJsProjects
+practicing javascript fundamentals
